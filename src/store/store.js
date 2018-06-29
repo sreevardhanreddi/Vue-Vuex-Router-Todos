@@ -13,10 +13,10 @@ export const store = new Vuex.Store({
     isSignedIn: null
   },
   getters: {
-    user(state) {
+    getUser(state) {
       return state.user;
     },
-    userSignedIn(state) {
+    getUserSignedIn(state) {
       return state.isSignedIn;
     }
   },
@@ -25,7 +25,9 @@ export const store = new Vuex.Store({
       state.user = payload;
     },
     signInUser(state, payload) {
+      console.log(state.isSignedIn, ' before');
       state.isSignedIn = payload;
+      console.log(state.isSignedIn, ' after');
     }
   },
   actions: {

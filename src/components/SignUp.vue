@@ -50,7 +50,7 @@ export default {
   computed: {
     // in() is a function which needs to be set up for routing
     in() {
-      return this.$store.getters.user;
+      return this.$store.getters.getUser;
     }
   },
   watch: {

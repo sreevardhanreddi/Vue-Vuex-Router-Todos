@@ -9,18 +9,18 @@
     <div class="form-group">
         <label for="materialFormLoginEmailEx">Your email</label>
         <i class="fa fa-envelope prefix grey-text"></i>
-        <input type="email" id="materialFormLoginEmailEx" class="form-control">
+        <input type="email" id="materialFormLoginEmailEx" class="form-control" v-model="email">
     </div>
 
     <!-- Material input password -->
     <div class="form-group">
         <label for="materialFormLoginPasswordEx">Your password</label>
         <i class="fa fa-lock prefix grey-text"></i>
-        <input type="password" id="materialFormLoginPasswordEx" class="form-control">
+        <input type="password" id="materialFormLoginPasswordEx" class="form-control" v-model="password">
     </div>
 
     <div class="text-center mt-4">
-        <button class="btn btn-default" type="">Login</button>
+        <button class="btn btn-default" @click="onSignIn">Login</button>
     </div>
 </div>
 <!-- Material form login -->
@@ -34,10 +34,10 @@ export default {
     return {
       email: '',
       password: '',
-      user: null
+      user: null,
+      isSignedIn: null
     };
   },
-
   methods: {
     onSignIn() {
       console.log({ email: this.email, password: this.password });
@@ -49,15 +49,19 @@ export default {
   },
   computed: {
     // in() is a function which needs to be set up for routing
-    in() {
-      return this.$store.getters.isSignedIn;
+    login() {
+      // console.log('isSignedIn', this.isSignedIn);
+      return this.$store.getters.getUserSignedIn;
     }
   },
   watch: {
     //isSignedIn goes to this function
-    in(value) {
-      if (value !== null) {
+    login(isAuth) {
+      if (isAuth !== null) {
+        console.log('isSignedIn', isAuth);
         this.$router.push('/');
+      } else {
+        console.log(isAuth, ' else');
       }
     }
   }
