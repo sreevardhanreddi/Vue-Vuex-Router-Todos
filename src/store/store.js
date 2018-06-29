@@ -10,7 +10,8 @@ export const store = new Vuex.Store({
     userId: null,
     List: [],
     user: null,
-    isSignedIn: null
+    isSignedIn: false,
+    hasLoggedOut: false
   },
   getters: {
     getUser(state) {
@@ -18,6 +19,9 @@ export const store = new Vuex.Store({
     },
     getUserSignedIn(state) {
       return state.isSignedIn;
+    },
+    getUserLogOut(state) {
+      return state.hasLoggedOut;
     }
   },
   mutations: {
@@ -26,8 +30,11 @@ export const store = new Vuex.Store({
     },
     signInUser(state, payload) {
       console.log(state.isSignedIn, ' before');
-      state.isSignedIn = payload;
+      state.isSignedIn = true;
       console.log(state.isSignedIn, ' after');
+    },
+    LogOut(state) {
+      state.isSignedIn = false;
     }
   },
   actions: {
@@ -60,6 +67,18 @@ export const store = new Vuex.Store({
           };
           commit('signInUser', newUser);
           console.log('successfully signed in ');
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    logOut({ commit }) {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          console.log('logged out');
+          commit('LogOut');
         })
         .catch(err => {
           console.log(err);

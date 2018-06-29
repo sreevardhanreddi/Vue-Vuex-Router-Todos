@@ -57,7 +57,7 @@ export default {
   watch: {
     //isSignedIn goes to this function
     login(isAuth) {
-      if (isAuth !== null) {
+      if (isAuth === true) {
         console.log('isSignedIn', isAuth);
         this.$router.push('/');
       } else {

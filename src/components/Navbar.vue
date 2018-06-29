@@ -10,17 +10,17 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
 
-            <router-link to="/signup" tag="li" active-class="active" class="nav-item"><a class="nav-link">Sign Up</a></router-link>
+            <router-link to="/signup" tag="li" active-class="active" class="nav-item" v-if="!disp"><a class="nav-link">Sign Up</a></router-link>
 
-            <router-link to="/signin" tag="li" active-class="active" class="nav-item"><a class="nav-link">Sign In</a></router-link>
+            <router-link to="/signin" tag="li" active-class="active" class="nav-item" v-if="!disp"><a class="nav-link">Sign In</a></router-link>
 
-            <router-link to="/list" tag="li" active-class="active" class="nav-item" v-if="false"><a class="nav-link">List</a></router-link>
-
-
+            <router-link to="/list" tag="li" active-class="active" class="nav-item" v-if="disp"><a class="nav-link">List</a></router-link>
 
 
-            <li class="nav-item" v-if="false">
-                <a class="nav-link" href="#">Log Out</a>
+
+
+            <li class="nav-item" v-if="disp">
+                <a class="nav-link" @click="logout">Log Out</a>
             </li>
         </ul>
     </div>
@@ -32,23 +32,31 @@
 export default {
   data() {
     return {
-      email: '',
-      password: '',
-      user: null
+      disp: false,
+      user: null,
+      isSignedIn: null
     };
   },
-
-  methods: {},
+  methods: {
+    logout() {
+      this.$store.dispatch('logOut');
+    }
+  },
   computed: {
-    // in() is a function which needs to be set up for routing
-    show() {
-      return this.$store.getters.user;
+    status() {
+      return this.$store.getters.getUserSignedIn;
     }
   },
   watch: {
-    show(value) {
-      if (value !== null) {
+    status(out) {
+      if (out === true) {
+        this.disp = out;
+        console.log(this.disp, ' disp');
         this.$router.push('/');
+      } else {
+        this.disp = false;
+        console.log(this.disp, ' disp');
+        // console.log(out, ' else');
       }
     }
   }
