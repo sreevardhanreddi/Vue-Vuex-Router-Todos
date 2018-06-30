@@ -22,6 +22,10 @@ export const store = new Vuex.Store({
     },
     getUserLogOut(state) {
       return state.hasLoggedOut;
+    },
+    getTodoList(state) {
+      console.log('list in state ', state.List);
+      return state.List;
     }
   },
   mutations: {
@@ -35,6 +39,17 @@ export const store = new Vuex.Store({
     },
     LogOut(state) {
       state.isSignedIn = false;
+    },
+    AddOne(state, payload) {
+      console.log('before list mutation ', payload, state.List);
+      state.List.push(payload);
+      console.log('after list mutation ', payload, state.List);
+    },
+    //mutations names should be in title case, usually a practice
+    DeleteOne(state, payload) {
+      // console.log('before list mutation ', payload, state.List);
+      state.List.splice(state.List.indexOf(payload), 1);
+      // console.log('after list mutation ', payload, state.List);
     }
   },
   actions: {
@@ -83,6 +98,13 @@ export const store = new Vuex.Store({
         .catch(err => {
           console.log(err);
         });
+    },
+    AddTodo({ commit }, payload) {
+      // console.log('action commited');
+      commit('AddOne', payload.todo);
+    },
+    DeleteTodo({ commit }, payload) {
+      commit('DeleteOne', payload.todoIndex);
     }
   }
 });

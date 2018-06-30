@@ -7,12 +7,13 @@ export const routes = [
   { path: '', component: About },
   { path: '/signup', component: SignUp },
   { path: '/signin', component: SignIn },
-  {
-    path: '/list',
-    component: List,
-    beforeEnter: (to, from, next) => {
-      next();
-    }
-  },
+  { path: '/list', component: List },
+  // {
+  //   path: '/list',
+  //   component: List,
+  //   // beforeEnter: (to, from, next) => {
+  //   //   next();
+  //   // }
+  // },
   { path: '*', redirect: '' }
 ];
