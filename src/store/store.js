@@ -35,6 +35,8 @@ export const store = new Vuex.Store({
     signInUser(state, payload) {
       console.log(state.isSignedIn, ' before');
       state.isSignedIn = true;
+      state.userId = payload;
+      console.log('user id after sign in ', state.userId);
       console.log(state.isSignedIn, ' after');
     },
     LogOut(state) {
@@ -50,11 +52,24 @@ export const store = new Vuex.Store({
       // console.log('before list mutation ', payload, state.List);
       state.List.splice(state.List.indexOf(payload), 1);
       // console.log('after list mutation ', payload, state.List);
+    },
+    ListTodos(state, payload) {
+      state.List = payload;
     }
   },
   actions: {
     getTodos({ commit }) {
       // firebase.
+      // firebase.database().ref('todos'+state.userId)
+      firebase
+        .database()
+        .ref('/todos/' + userId)
+        .once('value')
+        .then(function(snapshot) {
+          //Do something with your user data located in snapshot
+          console.log(snapshot);
+          commit('ListTodos', snapshot);
+        });
     },
     signup({ commit }, payload) {
       firebase
@@ -80,8 +95,9 @@ export const store = new Vuex.Store({
           const newUser = {
             id: firebase.auth().currentUser.uid
           };
-          commit('signInUser', newUser);
-          console.log('successfully signed in ');
+          commit('signInUser', newUser.id);
+
+          console.log('successfully signed in ', newUser.id);
         })
         .catch(err => {
           console.log(err);
@@ -101,10 +117,24 @@ export const store = new Vuex.Store({
     },
     AddTodo({ commit }, payload) {
       // console.log('action commited');
-      commit('AddOne', payload.todo);
+      firebase
+        .database()
+        .ref('/todos/' + this.state.userId)
+        .push(payload.todo)
+        .then(() => {
+          commit('AddOne', payload.todo);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     DeleteTodo({ commit }, payload) {
       commit('DeleteOne', payload.todoIndex);
     }
+    // addTodosToFirebase({commit}){
+    //   firebase.database().ref('/todos/'+userId).push({
+    //     List:
+    //   })
+    // }
   }
 });
